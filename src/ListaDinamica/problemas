@@ -1,0 +1,6 @@
+Não é possivel fazer remoção se o elemento for unico
+
+
+Sujestão:
+Criar método que busca o elemento, tentar reutiliza-lo no método de
+ remoção quando à verificação se elemento igual a conteúdo
