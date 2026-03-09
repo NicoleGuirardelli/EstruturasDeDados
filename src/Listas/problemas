@@ -1,4 +1,16 @@
-package ListaDinamica;
+Não é possivel fazer remoção se o elemento for unico
+lista dinâica remove todos os elementos fazer um que remava só um
+
+Sujestão:
+Criar método que busca o elemento, tentar reutiliza-lo no método de
+ remoção quando à verificação se elemento igual a conteúdo
+
+ this.inicio==null|| colocar no exibir
+
+ ListaSimples
+
+
+package Listas;
 public class ListaDinamica {
     No inicio;
 
@@ -8,13 +20,13 @@ public class ListaDinamica {
     }
 
     public void adicionarElemento(String conteudo) {
-        if(!this.existeInicio()) {
+        if (!this.existeInicio()) {
             this.inicio.setConteudo(conteudo);
         } else {
             No novoNo = new No(conteudo);
             No aux = this.inicio;
 
-            while(aux.getProx() != null) {
+            while (aux.getProx() != null) {
                 aux = aux.getProx();
             }
             aux.setProx(novoNo);
@@ -22,7 +34,7 @@ public class ListaDinamica {
     }
 
     private boolean existeInicio() {
-        if(this.inicio.getConteudo() == null) {
+        if (this.inicio.getConteudo() == null) {
             return false;
         } else {
             return true;
@@ -30,10 +42,10 @@ public class ListaDinamica {
     }
 
     public void exibirElementos() {
-        if(existeInicio()) {
+        if (existeInicio()) {
             No aux = this.inicio;
 
-            while(aux.getProx() != null) {
+            while (aux.getProx() != null) {
                 System.out.println(aux.getConteudo());
                 aux = aux.getProx();
             }
@@ -44,34 +56,26 @@ public class ListaDinamica {
     }
 
     public void removerElemento(String elemento) {
-        if(existeInicio()) {
-            No aux=this.inicio;
-            No anterior=null;
+        if (existeInicio()) {
+            No aux = this.inicio;
+            No anterior = null;
 
-            while (aux!=null) {
+            while (aux != null) {
                 if (aux.getConteudo().equals(elemento)) {
-                    if(anterior==null) {//verifico se ele é o primero elemento
-                         this.inicio=aux.getProx();
-                         //não funciona se o elemento for unico
-                    }else{//aqui serve para os elementos do meio
-                    anterior.setProx(aux.getProx());
+                    if (anterior == null) {//verifico se ele é o primero elemento
+                        this.inicio = aux.getProx();
+                        //não funciona se o elemento for unico
+                    } else {//aqui serve para os elementos do meio
+                        anterior.setProx(aux.getProx());
                     }
 
-                }else{
-                    anterior=aux;
+                } else {
+                    anterior = aux;
                 }
-
                 aux = aux.getProx();
-
             }
-//            //verifica se o ultimo conteudo é igual ao elemento
-//            if(aux.getConteudo().equals(elemento)) {
-//                anterior.setProx(null);
-//            }
-
         } else {
             System.out.println("Não existem elementos na lista.");
         }
     }
 }
-

@@ -1,4 +1,4 @@
-package ListaDinamica;
+package Listas;
 public class No {
     String conteudo;
     No prox;
