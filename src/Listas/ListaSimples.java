@@ -99,6 +99,7 @@ public class ListaSimples implements ListaOperacoes {
                 if ( lista[i]!=null &&lista[i].equals(elemento)) {
                     elementoRemovido++;
                     reenfilerar(i);
+                    i--;//volta um elemento, se não acaba pulando um
                 }
             }
             System.out.println("Todas ocorrencias de " + elemento + " removidas com sucesso");
@@ -124,13 +125,13 @@ public class ListaSimples implements ListaOperacoes {
     public int adicionarVarios(String[] elementos) {
         int espacoLivre= lista.length-contar();
         int indiceElemento =0;
-        if(espacoLivre<elementos.length) {
+       // if(espacoLivre<elementos.length) {
             for(int i=0; i< lista.length;i++) {
                 if(lista[i]==null) {
                     lista[i]=elementos[indiceElemento];
                     indiceElemento++;
                 }
-            }
+          //  }
         }
         return indiceElemento;
     }

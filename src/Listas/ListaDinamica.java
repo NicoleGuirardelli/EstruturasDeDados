@@ -8,13 +8,12 @@ public class ListaDinamica  implements ListaOperacoes{
     }
 
     public void adicionarElemento(String conteudo) {
-        if (!this.existeInicio()) {
+        if(!this.existeInicio()) {
             this.inicio.setConteudo(conteudo);
         } else {
             No novoNo = new No(conteudo);
             No aux = this.inicio;
-
-            while (aux.getProx() != null) {
+            while(aux.getProx() != null) {
                 aux = aux.getProx();
             }
             aux.setProx(novoNo);
@@ -22,18 +21,13 @@ public class ListaDinamica  implements ListaOperacoes{
     }
 
     private boolean existeInicio() {
-        if (this.inicio.getConteudo() == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return this.inicio.getConteudo() != null;
     }
 
     public void exibirElementos() {
-        if (existeInicio()) {
+        if(existeInicio()) {
             No aux = this.inicio;
-
-            while (aux.getProx() != null) {
+            while(aux.getProx() != null) {
                 System.out.println(aux.getConteudo());
                 aux = aux.getProx();
             }
@@ -44,56 +38,68 @@ public class ListaDinamica  implements ListaOperacoes{
     }
 
     public void removerElemento(String elemento) {
-        if (existeInicio()) {
-            No aux = this.inicio;
-            No anterior = null;
+        if(existeInicio()) {
+            if(buscarElemento(elemento)) {
 
-            while (aux != null) {
-                if (aux.getConteudo().equals(elemento)) {
-                    if (anterior == null) {//verifico se ele é o primero elemento
-                        this.inicio = aux.getProx();
-                        return;
-                        //não funciona se o elemento for unico
-                    } else {//aqui serve para os elementos do meio
-                        anterior.setProx(aux.getProx());
-                        return;
-                    }
+                //removendo primeiro
+                if(this.inicio.getConteudo().equals(elemento)) {
+                    this.inicio = this.inicio.getProx();
+                } else if(this.inicio.getProx() != null) {
+                    No aux = this.inicio;
+                    do {
+                        // removendo intermediario
+                        if(aux != null && aux.getProx().getConteudo().equals(elemento)) {
+                            aux.setProx(aux.getProx().getProx());
+                            return;
+                        }
+                        aux = aux.getProx();
 
+                    } while (aux != null);
                 } else {
-                    anterior = aux;
+                    this.inicio = null;
                 }
-                aux = aux.getProx();
             }
+
         } else {
             System.out.println("Não existem elementos na lista.");
         }
     }
 
+    public boolean buscarElemento(String elemento) {
+        No aux = this.inicio;
+
+        do {
+            if(aux.getConteudo().equals(elemento)) {
+                System.out.println("Elemento " + elemento + " encontrado.");
+                return true;
+            }
+            aux = aux.getProx();
+        } while(aux != null);
+        System.out.println("Elemento " + elemento + " não encontrado!");
+        return false;
+    }
+
     @Override
     public int removerTodas(String elemento) {
-        int elementoRemovido=0;
-        if (existeInicio()) {
-            No aux = this.inicio;
-            No anterior = null;
+        int qtdRemocao = 0;
 
-            while (aux != null) {
-                if (aux.getConteudo().equals(elemento)) {
-                    if (anterior == null) {//verifico se ele é o primero elemento
-                        this.inicio = aux.getProx();
-
-                    } else {//aqui serve para os elementos do meio
-                        anterior.setProx(aux.getProx());
-                    }
-                    elementoRemovido++;
-
-                } else {
-                    anterior = aux;
-                }
-                aux = aux.getProx();
-            }
+        while (existeInicio() && this.inicio.getConteudo().equals(elemento)){
+            if (this.inicio.getProx() == null){
+                System.out.println("Não existem mais elementos a serem removidos nessa lista"); }
+            this.inicio = this.inicio.getProx();
+            qtdRemocao++;
         }
-        return elementoRemovido;
+        No aux = this.inicio;
+        while (aux != null && aux.getProx() != null){
+            if (aux.getProx().getConteudo().equals(elemento)){
+                aux.setProx(aux.getProx().getProx());
+                qtdRemocao++;
+            } else { aux = aux.getProx(); }
+        }
+        return qtdRemocao;
     }
+
+
 
     @Override
     public int contar() {
@@ -113,19 +119,8 @@ public class ListaDinamica  implements ListaOperacoes{
         int elementoAdicionado=0;
 
           for(String  elemento: elementos){
-            if (!this.existeInicio()) {
-                this.inicio.setConteudo(elemento);
-                elementoAdicionado++;
-            } else {
-                No novoNo = new No(elemento);
-                No aux = this.inicio;
-                elementoAdicionado++;
-
-                while (aux.getProx() != null) {
-                    aux = aux.getProx();
-                }
-                aux.setProx(novoNo);
-            }
+              adicionarElemento(elemento);
+              elementoAdicionado++;
 
         }
         return elementoAdicionado;
@@ -133,45 +128,53 @@ public class ListaDinamica  implements ListaOperacoes{
 
     @Override
     public String obter(int indice) {
-        String elementoRetorno = null;
-        if (existeInicio()) {
-            No aux = this.inicio;
-            int posicao=0;
-            while (aux!= null) {
-                if(posicao==indice) {
-                    return elementoRetorno = aux.getConteudo();
-                }
-                aux=aux.getProx();
-                posicao++;
-            }
+
+        if (!existeInicio()){
+            return "A lista está vazia";
+        } else if (indice < 0){
+            return null;
         }
-        return elementoRetorno;
+
+        No aux = this.inicio;
+        int contarIndice = 0;
+
+        while (aux != null){
+            if (contarIndice == indice){
+                return "Elemento: " + aux.getConteudo() + "está no indice: " + indice;
+            }
+            aux = aux.getProx();
+            contarIndice++;
+        }
+
+        return null;
     }
 
     @Override
     public boolean inserir(int indice, String elemento) {
-        int posicao=0;
-        No aux = this.inicio;
-        No anterior = null;
-        No novoNo = new No(elemento);
-        while (aux!= null) {
-            if(posicao==indice) {
-                if (anterior == null) {//verifico se ele é o primero elemento
-                  anterior=aux;
-                  this.inicio = novoNo;
-                  novoNo.setProx(anterior.getProx());
-                }else{
-                        anterior.setProx(novoNo);
-                        novoNo.setProx(aux);
-                        return true;
-                }
-            }
-            anterior = aux;
-            aux=aux.getProx();
-            posicao++;
+        No novoNo  = new No(elemento);
+
+        if (indice == 0){
+            novoNo.setProx(this.inicio);
+            this.inicio = novoNo;
+            return true;
         }
-        return false;
-        //melhorar quando a posição for zero
+
+        No aux = this.inicio;
+        int contarIndice = 0;
+
+        while (aux != null && contarIndice < indice -1){ // pq quer segurar a mao do indice-1 para ficar na posicao de indice
+            aux = aux.getProx();
+            contarIndice++;
+        }
+
+        if (aux == null){
+            return false;
+        }
+
+        novoNo.setProx(aux.getProx());
+        aux.setProx(novoNo);
+
+        return true;
     }
 
     @Override
@@ -200,31 +203,28 @@ public class ListaDinamica  implements ListaOperacoes{
 
     @Override
     public void limpar() {
-        if (existeInicio()) {
-            this.inicio.setConteudo(null);
-        }
+        this.inicio = new No(null);
 
     }
 
     @Override
     public int ultimoIndiceDe(String elemento) {
-        if (existeInicio()) {
-            int ocorrencia=0;
-            int posicao = 0;
-            No aux = this.inicio;
-            while (aux != null) {
-                if (aux.getConteudo().equals(elemento)) {
-                    ocorrencia++;
-                    if (ocorrencia == this.contarOcorrencias(elemento)) {
-                        return posicao;
-                    }
-                }
-                posicao++;
-                aux = aux.getProx();
+        No aux = this.inicio;
+        int posicao = 0;
+        int indice = -1;
+
+        while (aux != null){
+            if (aux.getConteudo().equals(elemento)){
+                indice = posicao;
             }
+
+            aux = aux.getProx();
+            posicao++;
         }
-        return -1;
+
+        return indice;
     }
+
 
     @Override
     public int contarOcorrencias(String elemento) {
